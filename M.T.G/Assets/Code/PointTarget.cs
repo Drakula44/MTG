@@ -6,8 +6,7 @@ public class PointTarget : MonoBehaviour {
 	#region Variables
 	Vector2 target;
 	RectTransform rt;
-	[SerializeField]
-	float speed = 10f;
+	float speed = 100;
 	GameObject cam;
 	PointMain script;
 
@@ -28,7 +27,7 @@ public class PointTarget : MonoBehaviour {
 		if(CheckingSideBouncing())
 		{
 			NextTarget();
-			speed = Random.Range(50, 350);
+			speed = Random.Range(100, 350);
 		}
 	}
 

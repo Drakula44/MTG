@@ -34,7 +34,8 @@ public class PointMain : MonoBehaviour {
 		n = Random.Range(1, 4);
 		for (int i = 0; i < n; i++)
 		{
-			targets[i] = Instantiate(original,RandomCordinate(),Quaternion.identity,parent);
+			targets[i] = Instantiate(original,Vector3.zero,Quaternion.identity,parent);
+			targets[i].transform.localPosition = RandomCordinate();
 			targetscript[i] = targets[i].GetComponent<PointTarget>();
 		}
 	}
@@ -52,11 +53,11 @@ public class PointMain : MonoBehaviour {
 			targetscript[i] = targets[i].GetComponent<PointTarget>();
 		}
 	}
-	Vector3 RandomCordinate()
+	Vector2 RandomCordinate()
 	{
-		float _x = Random.Range(0, Screen.width);
-		float _y = Random.Range(0, Screen.height);
-		return new Vector3(_x, _y);
+		float _x = Random.Range(-Screen.width, Screen.width);
+		float _y = Random.Range(-Screen.height, Screen.height);
+		return (new Vector2(_x, _y));
 	}
 	public bool CheckingAll()
 	{

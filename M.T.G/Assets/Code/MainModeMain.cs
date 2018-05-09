@@ -53,7 +53,6 @@ public class MainModeMain : MonoBehaviour {
     }
 	void Update()
 	{
-		Animation();
 		noftouches = Input.touchCount;
 		if (bstart = true && btime == true)
 		{
@@ -108,44 +107,17 @@ public class MainModeMain : MonoBehaviour {
         apart = true;
         spawn = true;
         needing = true;
+		Animation();
         //ttoend = ttoend + ((1 / nofscore) * 15);
     }
     public void Animation()
     {
+		for (int i = 0; i < cordinates.Count; i++)
+		{
+			circlePooler.Instance.SpawnFromPool("circle", cordinates[i]);
+			spawn = false;
+		}
 
-        if(spawn == true)
-        {
-            for (int i = 0; i < cordinates.Count; i++)
-            {
-                circles.Add(Instantiate(circle, cordinates[i], Quaternion.identity, parentcircle));
-                spawn = false;
-            }
-            cordinates.Clear();
-        }
-        if(needing == true)
-        {
-            for (int i = 0; i < circles.Count; i++)
-            {
-                if(circles[i].localScale.x <= maxscale )
-                {
-                    circles[i].localScale += new Vector3(scale, scale, 1);
-                    a = circles[i].gameObject.GetComponent<Image>().color.a;
-                    a = a * 255 - 5;
-                    circles[i].gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, (byte)((int)a));
-                }
-            }
-
-
-            if(circles.Count != 0 && circles[0].localScale.x >= maxscale)
-            {
-                Object.Destroy(circles[0].gameObject);
-                circles.RemoveAt(0);
-                if(circles.Count == 0)
-                {
-                    needing = false;
-                }
-            }
-        }
     }
     public void Cordinate()
     {
@@ -157,15 +129,13 @@ public class MainModeMain : MonoBehaviour {
     }
     public void Replay()
     {
-        SceneManager.LoadScene("Scene/MainMenu");
+        SceneManager.LoadScene("Scene/MainMode");
     }
     public void Pause()
     {
-        if(btime == true)
-        {
-            btime = false;
-            pausepanel.SetActive(!pausepanel.activeSelf);
-        }
+		btime = !btime;
+		pausepanel.SetActive(!pausepanel.activeSelf);
+
     }
     public void GoOn()
     {
@@ -177,7 +147,7 @@ public class MainModeMain : MonoBehaviour {
     }
     public void Home()
     {
-		SceneManager.LoadScene("MainMenu");
+		SceneManager.LoadScene("Scene/MainMenu");
 	}
     public void GameOver()
     {
