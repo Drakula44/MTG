@@ -30,7 +30,7 @@ public class MainModeMain : MonoBehaviour {
     int nnext;
     int nofscore = 0;
     int noftouches = 0;
-    bool bstart = false;
+	
     bool btime = false;
     bool apart = false;
     bool spawn = false;
