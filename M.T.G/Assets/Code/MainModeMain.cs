@@ -4,76 +4,77 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainModeMain : MonoBehaviour {
+public class MainModeMain : MonoBehaviour
+{
 
 	#region Variables
-	public GameObject pausepanel;
-    public GameObject endpanel;
-    GameObject start;
-    Text current;
-    Text next;
-    Text score;
-    Text time;
-    public Text endtext;
-    List<Transform> circles = new List<Transform>();
-    List<Vector2> cordinates = new List<Vector2>();
-    public Transform parentcircle;
-    public Transform circle ;
+	public GameObject pausepanel;//za aktiviranje panela pauze
+	public GameObject endpanel;//za aktiviranje panela za kraj
+	GameObject start;//za pokretanje igre
+	Text current;//trenutan broj prstiju text
+	Text next;//sledeci broj prstiju text
+	Text score;//trenutan skor text
+	Text time;//trenutno vreme do kraja
+	public Text endtext;//ispis na kraju igre
+	List<Transform> circles = new List<Transform>();//skladeste za krugove 
+	List<Vector2> cordinates = new List<Vector2>();//skladiste za kordinate prstiju
+	public Transform parentcircle;//mesto za krugove
+	public Transform circle;//originalni krug
 
-    float ttoend = 10f;
-    float error = 0.5f;
-    float a;
-    float maxscale = 1.5f;
-    float scale = 0.03f;
-    int b;
-    int ncurrent;
-    int nnext;
-    int nofscore = 0;
-    int noftouches = 0;
-	
-    bool btime = false;
-    bool apart = false;
-    bool spawn = false;
-    bool needing = true;
+	float ttoend = 10f;//vreme do kraja
+	float error = 0.5f;//maksimalana greska
+	float a;
+	float maxscale = 1.5f;//maksimalan scale
+	float scale = 0.03f;//stepen povecavaja kruga
+	int b;
+	int ncurrent;//trenutan brodj prstiju
+	int nnext;//sledeci broj prstiju
+	int nofscore = 0;//trenutan score
+	int noftouches = 0;// trenutan broj dodira
+
+	bool bstart = false;//da li je igra pocela
+	bool btime = false;//da li vreme tece
+	bool apart = false;//da li su prsti odvoji od ekrana od zadnjeg ta;nog didrura
+	bool spawn = false;//da li je potrebno da se stvaraju krugovi
+	bool needing = true;//da li je potrebno da se povecavaju krugovi
 
 	#endregion
 
 	#region UnityMethods
-	void Start () {
-        start = GameObject.Find("start");
-        //pausepanel = GameObject.Find("pausepanel");
-        //endpanel = GameObject.Find("endpanel");
-        current = GameObject.Find("current").GetComponent<Text>();
-        next = GameObject.Find("next").GetComponent<Text>();
-        score = GameObject.Find("score").GetComponent<Text>();
-        time = GameObject.Find("time").GetComponent<Text>();
-        parentcircle = GameObject.Find("parentcircle").GetComponent<Transform>();
-        CStart();
+	void Start()
+	{
+		start = GameObject.Find("start");                                           //
+		current = GameObject.Find("current").GetComponent<Text>();                  //
+		next = GameObject.Find("next").GetComponent<Text>();                        //
+		score = GameObject.Find("score").GetComponent<Text>();                      //pronalazenje potrebnih objekata
+		time = GameObject.Find("time").GetComponent<Text>();                        //
+		parentcircle = GameObject.Find("parentcircle").GetComponent<Transform>();   //
+		CStart();//ovo treba izbaciti
 
-    }
+	}
 	void Update()
 	{
-		noftouches = Input.touchCount;
-		if (bstart = true && btime == true)
+		noftouches = Input.touchCount;// uzima broj prstiju
+		if (bstart = true && btime == true)// if za vreme 
 		{
-			ttoend -= Time.deltaTime;
-			time.text = ttoend.ToString("F2") + "sec";
+			ttoend -= Time.deltaTime;//smanjivanje vremena
+			time.text = ttoend.ToString("F2") + "sec";//ispisivaje vremena
 
 		}
-		if (ncurrent == noftouches && noftouches != 0 && apart == false)
+		if (ncurrent == noftouches && noftouches != 0 && apart == false)//da li je dobijen poen
 		{
 			Cordinate();
 			NextNumber();
 		}
-		if (ncurrent != noftouches && noftouches != 0 && btime == true)
+		if (ncurrent != noftouches && noftouches != 0 && btime == true)//racuna gresku
 		{
 			error -= Time.deltaTime;
 		}
-		if ((ttoend <= 0 || error <= 0) && btime == true)
+		if ((ttoend <= 0 || error <= 0) && btime == true)///provera kraj igre
 		{
 			GameOver();
 		}
-		if (noftouches == 0)
+		if (noftouches == 0)//gleda da li su prsti odvojeni od ekrana
 		{
 			apart = false;
 		}
@@ -82,84 +83,84 @@ public class MainModeMain : MonoBehaviour {
 
 
 	#region MyMethods
-	public void CStart()
-    {
+	public void CStart()//Pocetak igre kada se pritisne start dugme
+	{
 
-        ncurrent = Random.Range(1, 5);
-        current.text = ncurrent.ToString();
-        nnext = Random.Range(1, 5);
-        next.text = nnext.ToString();
-        nofscore = 0;
-        bstart = true;
-        btime = true;
-        Object.Destroy(start);
+		ncurrent = Random.Range(1, 5); //random broj
+		current.text = ncurrent.ToString();//ispisivanje trenutnog broja
+		nnext = Random.Range(1, 5);//random sledeci broj
+		next.text = nnext.ToString();//ispisivanje sledeceg broja
+		nofscore = 0;// postavljanje skora
+		bstart = true;// oznacavaje pocetka vremena
+		btime = true;// oznacavaje pocetka vremena
+		Object.Destroy(start);//unistavanje start dugmeta
 
-    }
-    public void NextNumber()
-    {
-        ncurrent = nnext;
-        nnext = Random.Range(1, 5);
-        current.text = ncurrent.ToString();
-        next.text = nnext.ToString();
-        nofscore++;
-        score.text = nofscore.ToString();
-        error = 0.5f;
-        apart = true;
-        spawn = true;
-        needing = true;
-		Animation();
-        //ttoend = ttoend + ((1 / nofscore) * 15);
-    }
-    public void Animation()
-    {
+	}
+	public void NextNumber()//kada se ta;no pritisne
+	{
+		ncurrent = nnext;						//
+		nnext = Random.Range(1, 5);				//
+		current.text = ncurrent.ToString();     //postavljanje sldeceeg broj
+		next.text = nnext.ToString();			//
+		nofscore++;								//povecavanje skora
+		score.text = nofscore.ToString();		//postavljanje skora
+		error = 0.5f;							//
+		apart = true;							//
+		spawn = true;							//vracanje pocetne greske
+		needing = true;							//
+		Animation();							
+		ttoend = ttoend + 0.1f;					//povecavanje vremena
+	}
+	public void Animation()//poziva animacije za stvaranje krug
+	{
 		for (int i = 0; i < cordinates.Count; i++)
 		{
 			circlePooler.Instance.SpawnFromPool("circle", cordinates[i]);
 			spawn = false;
 		}
 
-    }
-    public void Cordinate()
-    {
-        Touch[] myTouches = Input.touches;
-        for (int i = 0; i < Input.touchCount; i++)
-        {
-            cordinates.Add(myTouches[i].position);
-        }
-    }
-    public void Replay()
-    {
-        SceneManager.LoadScene("Scene/MainMode");
-    }
-    public void Pause()
-    {
+	}
+	public void Cordinate()//uzimanje kordinata dodira
+	{
+		Touch[] myTouches = Input.touches;
+		for (int i = 0; i < Input.touchCount; i++)
+		{
+			cordinates.Add(myTouches[i].position);
+		}
+	}
+	public void Replay()
+	{
+		SceneManager.LoadScene("Scene/MainMode");
+	}
+	public void Pause()
+	{
 		btime = !btime;
 		pausepanel.SetActive(!pausepanel.activeSelf);
 
-    }
-    public void GoOn()
-    {
-        if(btime == false)
-        {
-            pausepanel.SetActive(!pausepanel.activeSelf);
-            btime = true;
-        }
-    }
-    public void Home()
-    {
+	}//treba izbaciti
+	public void GoOn()
+	{
+		if (btime == false)
+		{
+			pausepanel.SetActive(!pausepanel.activeSelf);
+			btime = true;
+		}
+	}//treba izbaciti
+	public void Home()
+	{
 		SceneManager.LoadScene("Scene/MainMenu");
 	}
-    public void GameOver()
-    {
-        if(nofscore > PlayerPrefs.GetInt("HighScore",0))
-        {
-            PlayerPrefs.SetInt("HighScore", nofscore);
-        }
-        endpanel.SetActive(!endpanel.activeSelf);
-        endtext.text = "GAME OVER\n score: " + nofscore.ToString() + "\n HIGH SCORE:" + PlayerPrefs.GetInt("HighScore", 0).ToString();
-        time.text = "0";
-        bstart = false;
-        btime = false;
-    }
-	#endregion   
+	public void GameOver()
+	{
+		if (nofscore > PlayerPrefs.GetInt("HighScore", 0))
+		{
+			PlayerPrefs.SetInt("HighScore", nofscore);
+		}
+		endpanel.SetActive(!endpanel.activeSelf);
+		endtext.text = "GAME OVER\n score: " + nofscore.ToString() + "\n HIGH SCORE:" + PlayerPrefs.GetInt("HighScore", 0).ToString();
+		time.text = "0";
+		bstart = false;
+		btime = false;
+	}
+	#endregion
 }

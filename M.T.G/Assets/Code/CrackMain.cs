@@ -1,96 +1,73 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-
 
 public class CrackMain : MonoBehaviour {
 
 	#region Variables
-	public Transform originalline;
-	public Transform parentoflines;
-	Vector2 ccord = new Vector2(Screen.width / 2, Screen.height / 2);
-	Vector2 scord = new Vector2(Screen.width, Screen.height / 2);
-	List<Line> lines;
-	public Transform[] Olines;
-	public class Line
-	{
-		public float angle;
-		public Vector2 ecord;
-		public float lenght;
-	}
+
 	int n;
+	List<Vector2> ivice;
+	List<GameObject> givice;
+	List<Vector2> cordinates;
+	GameObject original;
+	Transform parent;
+	
+
+
 	#endregion
 
 	#region UnityMethods
-	private void Start()
-	{
-		NextLines();
-	}
-	private void Update()
-	{
-		
-	}
+
 	#endregion
 
+
 	#region MyMethods
-	void NextLines()
-	{ 
-		for (int i = 0; i < 4; i++)
+	public void Cordinate()//uzimanje kordinata dodira
+	{
+		Touch[] myTouches = Input.touches;
+		for (int i = 0; i < Input.touchCount; i++)
 		{
-			Olines[i].gameObject.SetActive(false);
+			cordinates.Add(myTouches[i].position);
 		}
-		n = Random.Range(1, 5);
-		if (n == 1)
-			n = 0;
-		lines = new List<Line>();
+	}
+	public void BStart()
+	{
+		n = Random.Range(1, 4);
 		for (int i = 0; i < n; i++)
 		{
-			lines.Add(SpawnLine(RandomSide()));
-			Olines[i].gameObject.SetActive(true);
-			Vector3 a = new Vector3(0, 0, lines[i].angle*Mathf.Rad2Deg);
-			//Olines[i].eulerAngles = a;
-			Olines[i].localScale = new Vector3(lines[i].lenght,1,1);
+			Vector2 t = RandomSide(ivice);
+			GameObject gt = Instantiate(original, t, Quaternion.identity, parent);
+			ivice.Add(t);
+			
 		}
+
 	}
-	float Angle(Vector2 _a)
+	Vector2 RandomSide(List<Vector2> ch)
 	{
-		float angle;
-		_a.x = _a.x - ccord.x;
-		_a.y = _a.y - ccord.y;
-		angle = Mathf.Acos((scord.x * _a.x + scord.y + _a.y) / Vector2.Distance(ccord, scord) * Vector2.Distance(ccord, _a)) * Mathf.Rad2Deg;
-		if(_a.y<0)
-		{
-			angle = 360 - angle;
-		}
-		return angle;
-	}
-	Vector2 RandomSide()
-	{	
 		int nside = Random.Range(1, 5);
-		Vector2 gl = new Vector2(Screen.width, Screen.height);
 		Vector2 sidekord;
-	 	float x, y;
+		int x, y;
 		switch (nside)
 		{
 			case 1:
-				x = -gl.x;
-				y = Random.Range(-gl.y, gl.y);
+				x = 0;
+				y = Random.Range(0, Screen.height);
 				sidekord = new Vector2(x, y);
 				break;
 			case 2:
-				x = Random.Range(-gl.x, gl.x);
-				y = -gl.y;
+				x = Random.Range(0, Screen.width);
+				y = 0;
 				sidekord = new Vector2(x, y);
 				break;
 			case 3:
-				x = gl.x;
-				y = Random.Range(-gl.y, gl.y);
+				x = Screen.width;
+				y = Random.Range(0, Screen.height);
 				sidekord = new Vector2(x, y);
 				break;
 			case 4:
-				x = Random.Range(-gl.x, gl.x);
-				y = gl.y;
+				x = Random.Range(0, Screen.width);
+				y = Screen.height;
 				sidekord = new Vector2(x, y);
 				break;
 			default:
@@ -99,14 +76,5 @@ public class CrackMain : MonoBehaviour {
 		}
 		return sidekord;
 	}
-	Line SpawnLine(Vector2 _ecord)
-	{
-		Line _line  = new Line();
-		_line.ecord = _ecord;
-		_line.angle = Angle(_ecord);
-		_line.lenght = Vector2.Distance(ccord, _ecord)*100;
-		return _line;
-	}
 	#endregion
-
 }
