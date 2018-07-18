@@ -9,6 +9,7 @@ public class PointMain : MonoBehaviour {
 	public Transform parent;
 	PointTarget[] targetscript = new PointTarget[4];
 	GameObject[] targets = new GameObject[4];
+    public GameObject original1;
 	#endregion
 
 	#region UnityMethods
@@ -19,11 +20,11 @@ public class PointMain : MonoBehaviour {
 
 	void Update () {
 		time -= Time.deltaTime;
-		
-		if(CheckingAll())
+        OnStart();
+		/*if(CheckingAll())
 		{
 			NextTargets();
-		}
+		}*/
 	}
 	
 	#endregion
@@ -55,8 +56,8 @@ public class PointMain : MonoBehaviour {
 	}
 	Vector2 RandomCordinate()
 	{
-		float _x = Random.Range(-Screen.width, Screen.width);
-		float _y = Random.Range(-Screen.height, Screen.height);
+		float _x = Random.Range(0, Screen.width/(Screen.width/720.0f));
+		float _y = Random.Range(0, Screen.height/ (Screen.height/1280.0f));
 		return (new Vector2(_x, _y));
 	}
 	public bool CheckingAll()

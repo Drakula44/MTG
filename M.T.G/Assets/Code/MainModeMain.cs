@@ -49,7 +49,7 @@ public class MainModeMain : MonoBehaviour
 		score = GameObject.Find("score").GetComponent<Text>();                      //pronalazenje potrebnih objekata
 		time = GameObject.Find("time").GetComponent<Text>();                        //
 		parentcircle = GameObject.Find("parentcircle").GetComponent<Transform>();   //
-		CStart();//ovo treba izbaciti
+		//  CStart();//ovo treba izbaciti
 
 	}
 	void Update()
