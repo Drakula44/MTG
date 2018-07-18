@@ -13,7 +13,7 @@ public class MainMenu : MonoBehaviour {
     {
         SceneManager.LoadScene("MainMode");
     }
-	public void Mode()
+	public void Point()
 	{
 		SceneManager.LoadScene("PointMode");
 	}
