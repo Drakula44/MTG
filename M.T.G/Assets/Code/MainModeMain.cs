@@ -54,6 +54,7 @@ public class MainModeMain : MonoBehaviour
 	}
 	void Update()
 	{
+        Animation();
 		noftouches = Input.touchCount;// uzima broj prstiju
 		if (bstart = true && btime == true)// if za vreme 
 		{
@@ -113,9 +114,9 @@ public class MainModeMain : MonoBehaviour
 	}
 	public void Animation()//poziva animacije za stvaranje krug
 	{
-		for (int i = 0; i < cordinates.Count; i++)
+		for (int i = 0; i < 1; i++)
 		{
-			circlePooler.Instance.SpawnFromPool("circle", cordinates[i]);
+			circlePooler.Instance.SpawnFromPool("circle",/* cordinates[i]*/new Vector2(0,0));
 			spawn = false;
 		}
 
