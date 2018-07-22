@@ -20,6 +20,8 @@ public class MainModeMain : MonoBehaviour
 	List<Vector2> cordinates = new List<Vector2>();//skladiste za kordinate prstiju
 	public Transform parentcircle;//mesto za krugove
 	public Transform circle;//originalni krug
+	public static Queue<Transform> uubotrebi;
+	public static Queue<Transform> vanupotrebe;
 
 	float ttoend = 10f;//vreme do kraja
 	float error = 0.5f;//maksimalana greska
@@ -49,12 +51,10 @@ public class MainModeMain : MonoBehaviour
 		score = GameObject.Find("score").GetComponent<Text>();                      //pronalazenje potrebnih objekata
 		time = GameObject.Find("time").GetComponent<Text>();                        //
 		parentcircle = GameObject.Find("parentcircle").GetComponent<Transform>();   //
-		//  CStart();//ovo treba izbaciti
-
 	}
 	void Update()
 	{
-        Animation();
+        //Animation();
 		noftouches = Input.touchCount;// uzima broj prstiju
 		if (bstart = true && btime == true)// if za vreme 
 		{
@@ -116,8 +116,8 @@ public class MainModeMain : MonoBehaviour
 	{
 		for (int i = 0; i < 1; i++)
 		{
-			circlePooler.Instance.SpawnFromPool("circle",/* cordinates[i]*/new Vector2(0,0));
-			spawn = false;
+			Transform pr = Instantiate(circle, parentcircle);
+			pr.position = cordinates[i];
 		}
 
 	}
